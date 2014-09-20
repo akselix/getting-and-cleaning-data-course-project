@@ -13,7 +13,7 @@ packages <- function(x){
 }
 
 packages(dplyr)
-
+packages(plyr)
 
 ## Download data if directory "UCI HAR Dataset" doesn't exist in current working directory. ####
 
@@ -83,9 +83,10 @@ all.df <- rbind(test.df, train.df)
 
 # Read activity labels and rename columns.
 activity.labels <- read.table('./activity_labels.txt', col.names=c("activityId","activityName"))
+# Convert activityName to lower case.
+activity.labels <- mutate(activity.labels, activityName = as.factor(tolower(levels(activityName))))
 # Convert activityId column to factor labeled by corresponding activity.labels.
 all.df$activityId <- factor(all.df$activityId, levels = activity.labels$activityId, labels = activity.labels$activityName)
-
 # Convert to tbl_df for dplyr.
 all.tbl <- tbl_df(all.df)
 # Arrange tbl.
