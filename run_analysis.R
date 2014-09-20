@@ -14,6 +14,7 @@ packages <- function(x){
 
 packages(dplyr)
 packages(plyr)
+packages(data.table)
 
 ## Download data if directory "UCI HAR Dataset" doesn't exist in current working directory. ####
 
@@ -59,7 +60,7 @@ test.subject.id <- read.table("./test/subject_test.txt")
 colnames(test.subject.id)  <- "subjectId"
 # Read activity ids of the test data and label column.
 test.activity.id  <- read.table("./test/y_test.txt")
-colnames(test.activity.id) <- "activityId"
+colnames(test.activity.id) <- "activity"
 # Read test data and label columns.
 test.set <- read.table("./test/X_test.txt")
 colnames(test.set)  <- feature.names
@@ -68,7 +69,7 @@ test.df <- cbind(test.activity.id, test.subject.id, test.set)
 
 # Read activity ids of the training data and label column.
 train.activity.id  <- read.table("./train/y_train.txt")
-colnames(train.activity.id) <- "activityId"
+colnames(train.activity.id) <- "activity"
 # Read training subject ids and label column.
 train.subject.id <- read.table("./train/subject_train.txt")
 colnames(train.subject.id)  <- "subjectId"
@@ -82,15 +83,15 @@ train.df <- cbind(train.activity.id, train.subject.id, train.set)
 all.df <- rbind(test.df, train.df)
 
 # Read activity labels and rename columns.
-activity.labels <- read.table('./activity_labels.txt', col.names=c("activityId","activityName"))
+activity.labels <- read.table('./activity_labels.txt', col.names=c("activity","activityName"))
 # Convert activityName to lower case.
 activity.labels <- mutate(activity.labels, activityName = as.factor(tolower(levels(activityName))))
-# Convert activityId column to factor labeled by corresponding activity.labels.
-all.df$activityId <- factor(all.df$activityId, levels = activity.labels$activityId, labels = activity.labels$activityName)
+# Convert activity column to factor labeled by corresponding activity.labels.
+all.df$activity <- factor(all.df$activity, levels = activity.labels$activity, labels = activity.labels$activityName)
 # Convert to tbl_df for dplyr.
 all.tbl <- tbl_df(all.df)
 # Arrange tbl.
-all.tbl <- arrange(all.tbl, activityId, subjectId)
+all.tbl <- arrange(all.tbl, activity, subjectId)
 
 
 
@@ -101,20 +102,19 @@ all.tbl <- arrange(all.tbl, activityId, subjectId)
 # -> Column names changed to "Mean" and "Std" earlier. Selecting columns with these.
 
 # Select wanted rows based on column name.
-mean.tbl <- select(all.tbl, activityId, subjectId, contains('Mean'))
-std.tbl <- select(all.tbl, activityId, subjectId, contains('Std'))
-mean.std.tbl <- tbl_df(cbind(mean.tbl, std.tbl))
+mean.tbl <- select(all.tbl, activity, subjectId, contains('Mean'))
+std.tbl <- select(all.tbl, activity, subjectId, contains('Std'))
+mean.std.df <- cbind(mean.tbl, std.tbl)
 
 
-## Create a table with average of each variable for each activity and each subject. ####
-average.tbl <- all.tbl %>%
-    group_by(activityId, subjectId) %>%
-    summarise_each(funs(mean))
+## Create a data table with average of each variable for each activity and each subject. ####                
+average.dt <- data.table(mean.std.df)
+average.dt <- average.dt[, lapply(.SD, mean), by = list(activity,subjectId)]
 
 
 ## Write datasets to disk. ####
-write.csv(mean.std.tbl, file = 'tidy_uci_mean_and_std.txt')
-write.csv(average.tbl, file = 'tidy_uci_variable_averages.txt')
-write.csv(all.df, file = 'tidy_uci_combined_raw.txt')
+write.table(mean.std.df, file = 'tidy_uci_mean_and_std.txt', row.name = F)
+write.table(average.dt, file = 'tidy_uci_variable_averages.txt', row.name = F)
+write.table(all.df, file = 'tidy_uci_combined_raw.txt', row.name = F)
 
 print("Tidy datasets are now saved to ./UCI HAR Dataset/ -directory. All the new files have tidy_ -prefix")
