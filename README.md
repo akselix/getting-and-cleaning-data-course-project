@@ -18,5 +18,5 @@ source('./run_analysis.R')
 
 3. After data tidying process is finished three files are written to “UCI HAR Dataset” -directory.
 	1. tidy_uci_combined_raw.txt
-	2. tidy_uci_mean_and_std.tx
+	2. tidy_uci_mean_and_std.txt
 	3. tidy_uci_variable_averages.txt

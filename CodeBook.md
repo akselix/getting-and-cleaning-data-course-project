@@ -10,11 +10,11 @@ The original data comes from smartphone accelelerometer and gyroscope 3-axial ra
 * [source](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip)
 * [description](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)  
 
-The downloadable file is in zip format. When unarhived, it produces a directory named "UCI HAR Dataset" with tens of files inside.
+The downloadable file is in zip format. When unarchived, it produces a directory named "UCI HAR Dataset" with tens of files inside.
 
 #### Tidy Dataset Produced by run_analysis.R script
 
-THe script combines data from different files to form one dataset. This is then further processed adhering to [tidy data principles](https://www.google.fi/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CCEQFjAA&url=http%3A%2F%2Fvita.had.co.nz%2Fpapers%2Ftidy-data.pdf&ei=DrIdVIqLJ6n9ywPy-oHgBQ&usg=AFQjCNFUAQr-w_87XpPhfEDoDYQw5-G5zg&sig2=JY2UyqcSORfZahqfVvDeuQ&bvm=bv.75775273,d.bGQ) by Wickham.
+The script combines data from different files to form one dataset. This is then further processed adhering to [tidy data principles](https://www.google.fi/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CCEQFjAA&url=http%3A%2F%2Fvita.had.co.nz%2Fpapers%2Ftidy-data.pdf&ei=DrIdVIqLJ6n9ywPy-oHgBQ&usg=AFQjCNFUAQr-w_87XpPhfEDoDYQw5-G5zg&sig2=JY2UyqcSORfZahqfVvDeuQ&bvm=bv.75775273,d.bGQ) by Wickham.
 
 
 ##### Naming conventions
